@@ -1,38 +1,45 @@
-🍊 Sicilijanske Pomaranče & Limonce
+# 🍊 Sicilijanske Pomaranče & Limonce
 
-Preprosta spletna aplikacija za naročanje svežih pomaranč in limon neposredno iz Sicilije.
+Preprosta spletna aplikacija za naročanje svežih **pomaranč** in **limon** neposredno iz Sicilije.  
 Uporabniki lahko pregledajo aktualne cene sadja ter oddajo naročilo prek enostavnega spletnega vmesnika.
 
-✨ Funkcionalnosti
+---
 
-🟠 Pregled cen pomaranč in limon
+## ✨ Funkcionalnosti
 
-🛒 Košarica z izbranim sadjem
+- 🟠 Pregled cen pomaranč in limon  
+- 🛒 Košarica z izbranim sadjem  
+- 🚀 Gumb za oddajo naročila  
+- 💎 Minimalističen in odziven dizajn  
 
-🚀 Gumb za oddajo naročila
+---
 
-💎 Minimalističen in odziven dizajn
+## 🧩 Tehnologije
 
-🧩 Tehnologije
+- **Frontend:** React / Next.js / Tailwind CSS  
+- **Backend:** Node.js / Express *(opcijsko)*  
+- **Podatki:** JSON / API povezava na dobavitelja *(mock za razvoj)*  
 
-Frontend: React / Next.js / Tailwind CSS
+---
 
-Backend: Node.js / Express (opcijsko)
+### 🧠 Načrt razvoja
 
-Podatki: JSON / API povezava na dobavitelja (mock za razvoj)
+1. Prikaz osnovne strani z izdelki (pomaranče, limone)  
+2. Dinamičen izračun cene glede na količino  
+3. Implementacija košarice in oddaje naročila  
 
-🧠 Načrt
+---
 
-Prikaz osnovne strani z izdelki (pomaranče, limone)
+### 🚧 Status projekta
 
-Dinamičen izračun cene glede na količino
+Projekt je v **zgodnji fazi razvoja (MVP)**.  
+Cilj je izdelati enostavno, hitro in pregledno rešitev za spletno naročanje sadja.  
 
-Implementacija košarice in oddaje naročila
+---
 
-🚧 Status
+## 📜 Licenca
 
-Projekt je v zgodnji fazi razvoja (MVP).
+**MIT License © 2025**
 
-📜 Licenca
+---
 
-MIT License © 2025
