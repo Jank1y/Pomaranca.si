@@ -1,65 +1,66 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="sl">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="style.css" />
-    <title>Pomaranče.si</title>
+    <title>Pomarance.si</title>
   </head>
   <body>
     <div class="main">
       <!-- Levi del strani -->
       <div class="leva">
-        <h1>Pomaranče.si🍊</h1>
+        <h1>Pomarance.si🍊</h1>
+
         <div class="izdelki">
+          <!-- Izdelek 1 -->
           <div class="izdelek">
-            <div class="naslov"><h3>Pomaranče🍊</h3></div>
-            <div class="opis">
-              <p>
-                Sočne in aromatične pomaranče, dozorele pod sicilijanskim
-                soncem. Popolne za svež sok, zajtrk ali zdravo malico.
-              </p>
+            <div class="slika">
+              <img src="Images/pomarance.jpg" alt="Pomarance" />
             </div>
-            <button>🛒 Dodaj v košarico</button>
+            <div class="vsebina">
+              <div class="naslov"><h3>Pomarance🍊 - 24</h3></div>
+              <p>Socne in aromaticne pomarance, dozorele pod sicilijanskim soncem.</p>
+              <button class="kosarica">🛒 Dodaj v košarico</button>
+            </div>
           </div>
 
+          <!-- Izdelek 2 -->
           <div class="izdelek">
-            <div class="naslov"><h3>Limone🍋</h3></div>
-            <div class="opis">
-              <p>
-                Naravno pridelane limone z intenzivnim okusom in tanko, dišečo
-                lupino. Idealne za čaje, sladice ali limonado. 🌿 Brez
-                pesticidov in umetnih dodatkov.
-              </p>
+            <div class="slika">
+              <img src="Images/lemons.avif" alt="Limone" />
             </div>
-            <button>🛒 Dodaj v košarico</button>
+            <div class="vsebina">
+              <div class="naslov"><h3>Limone🍋 - 20</h3></div>
+              <p>Naravno pridelane limone z intenzivnim okusom in tanko, dišeco lupino.</p>
+              <button class="kosarica">🛒 Dodaj v košarico</button>
+            </div>
           </div>
 
+          <!-- Izdelek 3 -->
           <div class="izdelek">
-            <div class="naslov"><h3>Drugo🍏</h3></div>
-            <div class="opis">
-              <p>
-                Hrustljava, sladka in rahlo medena jabolka iz lokalnih
-                sadovnjakov. Odlična za vsak dan ali domače pite. 🍏 Sveže
-                obrana in pakirana v Sloveniji.
-              </p>
+            <div class="slika">
+              <img src="Images/fruit.jpg" alt="Drugo" />
             </div>
-            <button>🛒 Dodaj v košarico</button>
+            <div class="vsebina">
+              <div class="naslov"><h3>Drugo🍏 - 15</h3></div>
+              <p>Hrustljava jabolka iz lokalnih sadovnjakov. Sveže in slastne!</p>
+              <button class="kosarica">🛒 Dodaj v košarico</button>
+            </div>
           </div>
         </div>
       </div>
 
       <!-- Desni del strani -->
       <div class="desna">
-        <h2>Košarica</h2>
-        <ul>
-          <li>Pomaranče – 3 kg</li>
-          <li>Limone – 2 kg</li>
-        </ul>
+        <h2>🧺 Košarica</h2>
+        <ul id="kosarica"></ul>
         <div class="skupaj">
-          <h3>Skupaj: 24 €</h3>
+          <h3>Skupaj: <span id="skupaj-znesek">0 €</span></h3>
         </div>
       </div>
     </div>
+
+    <script src="index.js"></script>
   </body>
 </html>
