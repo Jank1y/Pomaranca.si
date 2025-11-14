@@ -8,6 +8,7 @@
   </head>
   <body>
 
+    <!-- Burger + overlay za mobilne naprave -->
     <div id="burger-menu">☰</div>
     <div id="overlay"></div>
 
@@ -24,10 +25,7 @@
             </div>
             <div class="vsebina">
               <div class="naslov"><h3>Pomarance🍊 - 24</h3></div>
-              <p>
-                Socne in aromaticne pomarance, dozorele pod sicilijanskim
-                soncem.
-              </p>
+              <p>Socne in aromaticne pomarance, dozorele pod sicilijanskim soncem.</p>
               <button class="kosarica">🛒 Dodaj v košarico</button>
             </div>
           </div>
@@ -39,10 +37,7 @@
             </div>
             <div class="vsebina">
               <div class="naslov"><h3>Limone🍋 - 20</h3></div>
-              <p>
-                Naravno pridelane limone z intenzivnim okusom in tanko, dišeco
-                lupino.
-              </p>
+              <p>Naravno pridelane limone z intenzivnim okusom in tanko, dišeco lupino.</p>
               <button class="kosarica">🛒 Dodaj v košarico</button>
             </div>
           </div>
@@ -54,16 +49,18 @@
             </div>
             <div class="vsebina">
               <div class="naslov"><h3>Drugo🍏 - 15</h3></div>
-              <p>
-                Hrustljava jabolka iz lokalnih sadovnjakov. Sveže in slastne!
-              </p>
+              <p>Hrustljava jabolka iz lokalnih sadovnjakov. Sveže in slastne!</p>
               <button class="kosarica">🛒 Dodaj v košarico</button>
             </div>
+          </div>
+
+          <div style="margin-top: 18px;">
+            <button id="oddaj-narocilo" class="kosarica">✅ Oddaj naročilo</button>
           </div>
         </div>
       </div>
 
-      <!-- Desni del strani -->
+      <!-- Desni del strani (košarica) -->
       <div class="desna">
         <button id="close-cart">✖</button>
         <h2>🧺 Košarica</h2>
@@ -71,6 +68,25 @@
         <div class="skupaj">
           <h3>Skupaj: <span id="skupaj-znesek">0 €</span></h3>
         </div>
+      </div>
+    </div>
+
+    <!-- Modal za obrazec -->
+    <div id="order-modal" class="modal">
+      <div class="modal-content">
+        <h3>Oddaj naročilo</h3>
+        <form id="order-form">
+          <label for="ime">Ime</label>
+          <input id="ime" name="ime" required />
+          <label for="priimek">Priimek</label>
+          <input id="priimek" name="priimek" required />
+          <label for="email">Email (opcijsko)</label>
+          <input id="email" name="email" type="email" />
+          <div class="modal-actions">
+            <button type="button" id="cancel-order">Prekliči</button>
+            <button type="submit" id="confirm-order">Potrdi</button>
+          </div>
+        </form>
       </div>
     </div>
 

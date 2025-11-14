@@ -10,6 +10,14 @@ body {
   color: #222;
 }
 
+#overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  z-index: 1000;
+}
+
 .main {
   display: flex;
   height: 100vh;
@@ -25,6 +33,7 @@ body {
   padding: 30px;
   border-left: 3px solid #ff9800;
   background: #fffaf1;
+  position: relative;
 }
 
 h1 {
@@ -83,12 +92,6 @@ button.kosarica:hover {
   background: darkorange;
 }
 
-/* === Košarica === */
-
-.desna h2 {
-  margin-bottom: 20px;
-}
-
 #kosarica {
   list-style: none;
   padding: 0;
@@ -132,75 +135,116 @@ button.kosarica:hover {
   cursor: pointer;
   font-size: 1.1em;
 }
-/* BURGER GUMB */
+
+#close-cart {
+  display: none;
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: transparent;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  z-index: 2000;
+}
+
 #burger-menu {
   display: none;
   position: fixed;
   top: 15px;
   right: 15px;
-  font-size: 32px;
+  font-size: 28px;
   cursor: pointer;
-  z-index: 1001;
+  z-index: 1003;
 }
 
-/* OVERLAY ZA ZATEMNITEV */
-#overlay {
+.modal {
   display: none;
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.5);
-  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+  z-index: 1004;
 }
 
-#overlay.prikazano {
+.modal .modal-content {
+  width: 90%;
+  max-width: 420px;
+  background: #fff;
+  padding: 18px;
+  border-radius: 10px;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+}
+
+.modal label {
   display: block;
+  margin-top: 8px;
+  font-size: 0.9rem;
 }
 
-/* === MOBILNI NAČIN === */
-@media (max-width: 768px) {
+.modal input {
+  width: 100%;
+  padding: 8px;
+  margin-top: 6px;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+}
 
-  /* Prikazi burger meni */
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.modal-actions button {
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+}
+
+#cancel-order {
+  background: #f2f2f2;
+}
+
+#confirm-order {
+  background: orange;
+  color: white;
+}
+
+/* Mobilni burger meni */
+@media (max-width: 768px) {
   #burger-menu {
     display: block;
   }
-
-  /* Kosarica postane slide-in meni */
+  #overlay.prikazano {
+    display: block;
+  }
   .desna {
     position: fixed;
     top: 0;
-    right: -320px;
-    width: 300px;
+    right: -360px;
+    width: 340px;
     height: 100vh;
     background: #fffaf1;
     padding: 30px;
-    transition: 0.3s;
+    transition: 0.28s;
     z-index: 1002;
     border-left: 3px solid #ff9800;
+    box-shadow: -6px 0 20px rgba(0,0,0,0.12);
   }
-
   .desna.odprto {
     right: 0;
   }
-
-  /* Main se zlozi pod kosarico */
   .main {
     flex-direction: column;
   }
-}
-#close-cart {
-  display: none;
-  position: absolute;
-  top: 15px;
-  right: 15px;
-  background: transparent;
-  border: none;
-  font-size: 28px;
-  cursor: pointer;
-  z-index: 2000;
-}
-
-@media (max-width: 768px) {
   #close-cart {
     display: block;
   }
+}
+
+.modal.prikazano {
+  display: flex;
 }
