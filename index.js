@@ -103,3 +103,8 @@ gumbi.forEach((gumb) => {
     }
   });
 });
+const closeCartBtn = document.getElementById("close-cart");
+
+if (closeCartBtn) {
+  closeCartBtn.addEventListener("click", zapriKosarico);
+}
