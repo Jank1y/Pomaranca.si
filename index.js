@@ -65,3 +65,41 @@ gumbi.forEach((gumb) => {
     posodobiKosarico();
   });
 });
+/* =============================
+   === BURGER MENI FUNKCIJE ===
+   ============================= */
+
+const burger = document.getElementById("burger-menu");
+const kosaricaPanel = document.querySelector(".desna");
+const overlay = document.getElementById("overlay");
+
+// ODPRE KOŠARICO (samo na mobitelu)
+function odpriKosarico() {
+  kosaricaPanel.classList.add("odprto");
+  overlay.classList.add("prikazano");
+}
+
+// ZAPRE KOŠARICO
+function zapriKosarico() {
+  kosaricaPanel.classList.remove("odprto");
+  overlay.classList.remove("prikazano");
+}
+
+// Klik na burger
+if (burger) {
+  burger.addEventListener("click", odpriKosarico);
+}
+
+// Klik na overlay (zapre)
+if (overlay) {
+  overlay.addEventListener("click", zapriKosarico);
+}
+
+// Če klikneš "Dodaj v košarico" → zapre meni (samo telefon)
+gumbi.forEach((gumb) => {
+  gumb.addEventListener("click", () => {
+    if (window.innerWidth < 768) {
+      zapriKosarico();
+    }
+  });
+});

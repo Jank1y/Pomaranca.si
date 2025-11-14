@@ -132,3 +132,58 @@ button.kosarica:hover {
   cursor: pointer;
   font-size: 1.1em;
 }
+/* BURGER GUMB */
+#burger-menu {
+  display: none;
+  position: fixed;
+  top: 15px;
+  right: 15px;
+  font-size: 32px;
+  cursor: pointer;
+  z-index: 1001;
+}
+
+/* OVERLAY ZA ZATEMNITEV */
+#overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 1000;
+}
+
+#overlay.prikazano {
+  display: block;
+}
+
+/* === MOBILNI NAČIN === */
+@media (max-width: 768px) {
+
+  /* Prikazi burger meni */
+  #burger-menu {
+    display: block;
+  }
+
+  /* Kosarica postane slide-in meni */
+  .desna {
+    position: fixed;
+    top: 0;
+    right: -320px;
+    width: 300px;
+    height: 100vh;
+    background: #fffaf1;
+    padding: 30px;
+    transition: 0.3s;
+    z-index: 1002;
+    border-left: 3px solid #ff9800;
+  }
+
+  .desna.odprto {
+    right: 0;
+  }
+
+  /* Main se zlozi pod kosarico */
+  .main {
+    flex-direction: column;
+  }
+}
