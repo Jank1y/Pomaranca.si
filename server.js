@@ -1,130 +1,107 @@
 const express = require("express");
 const path = require("path");
-const fs = require("fs");
 const sqlite3 = require("sqlite3").verbose();
+const bodyParser = require("body-parser");
 const ExcelJS = require("exceljs");
-const cors = require("cors");
+const fs = require("fs");
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = 3000;
 
-app.use(cors());
-app.use(express.json());
-app.use(express.static(__dirname));
+// === STATIC FILES ===
+app.use(express.static(path.join(__dirname, "public")));
+app.use(bodyParser.json());
 
-// ---------- SQLITE setup ----------
-const dbFile = path.join(__dirname, "database.sqlite");
-const db = new sqlite3.Database(dbFile);
+// === DATABASE PATH ===
+const dataFolder = path.join(__dirname, "data");
 
-db.serialize(() => {
-  db.run(
-    `CREATE TABLE IF NOT EXISTS orders (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      ime TEXT,
-      priimek TEXT,
-      email TEXT,
-      items TEXT, -- JSON string
-      total REAL,
-      created_at TEXT
-    )`
-  );
-});
-
-// ---------- helper: append to Excel ----------
-const excelFile = path.join(__dirname, "orders.xlsx");
-
-async function appendOrderToExcel(order) {
-  const workbook = new ExcelJS.Workbook();
-  let sheet;
-
-  if (fs.existsSync(excelFile)) {
-    await workbook.xlsx.readFile(excelFile);
-    sheet = workbook.getWorksheet("Orders") || workbook.addWorksheet("Orders");
-  } else {
-    sheet = workbook.addWorksheet("Orders");
-    // header
-    sheet.addRow([
-      "Order ID",
-      "Ime",
-      "Priimek",
-      "Email",
-      "Items (JSON)",
-      "Total",
-      "Created At"
-    ]);
-  }
-
-  sheet.addRow([
-    order.id,
-    order.ime,
-    order.priimek,
-    order.email || "",
-    JSON.stringify(order.items),
-    order.total,
-    order.created_at
-  ]);
-
-  await workbook.xlsx.writeFile(excelFile);
+// Ustvari mapo /data če ne obstaja
+if (!fs.existsSync(dataFolder)) {
+    fs.mkdirSync(dataFolder);
+    console.log("Mapa /data ustvarjena.");
 }
 
-// ---------- API endpoint ----------
-app.post("/api/order", (req, res) => {
-  try {
-    const { customer, items, total, created_at } = req.body;
-    if (!customer || !items) {
-      return res.status(400).json({ error: "Manjkajo podatki naročila." });
+const dbPath = path.join(dataFolder, "database.sqlite");
+const dbExists = fs.existsSync(dbPath);
+
+const db = new sqlite3.Database(dbPath, (err) => {
+    if (err) {
+        console.error("Napaka pri odprtju baze:", err);
+    }
+});
+
+// === CREATE TABLE IF NOT EXISTS ===
+db.serialize(() => {
+    db.run(
+        `CREATE TABLE IF NOT EXISTS narocila (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            ime TEXT,
+            priimek TEXT,
+            email TEXT,
+            izdelki TEXT,
+            timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
+        )`,
+        () => {
+            if (!dbExists) console.log("Baza ustvarjena.");
+        }
+    );
+});
+
+// === POST: SHRANI NAROČILO ===
+app.post("/api/narocilo", (req, res) => {
+    const { ime, priimek, email, izdelki } = req.body;
+
+    if (!ime || !priimek || !email || !izdelki) {
+        return res.status(400).json({ error: "Manjkajo podatki." });
     }
 
-    const ime = customer.ime || "";
-    const priimek = customer.priimek || "";
-    const email = customer.email || "";
-    const itemsJson = JSON.stringify(items);
+    const izdelkiJSON = JSON.stringify(izdelki);
 
-    const stmt = db.prepare(
-      `INSERT INTO orders (ime, priimek, email, items, total, created_at) VALUES (?, ?, ?, ?, ?, ?)`
+    db.run(
+        "INSERT INTO narocila (ime, priimek, email, izdelki) VALUES (?, ?, ?, ?)",
+        [ime, priimek, email, izdelkiJSON],
+        function (err) {
+            if (err) return res.status(500).json({ error: err.message });
+
+            res.json({ success: true, id: this.lastID });
+        }
     );
+});
 
-    stmt.run(ime, priimek, email, itemsJson, total || 0, created_at || new Date().toISOString(), function (err) {
-      if (err) {
-        console.error("DB insert error:", err);
-        return res.status(500).json({ error: "Napaka pri shranjevanju v bazo." });
-      }
+// === GET: EXPORT TO EXCEL ===
+app.get("/api/izvozi-excel", (req, res) => {
+    db.all("SELECT * FROM narocila", async (err, rows) => {
+        if (err) return res.status(500).send(err.message);
 
-      const insertedId = this.lastID;
+        const workbook = new ExcelJS.Workbook();
+        const sheet = workbook.addWorksheet("Naročila");
 
-      const orderRecord = {
-        id: insertedId,
-        ime,
-        priimek,
-        email,
-        items,
-        total,
-        created_at: created_at || new Date().toISOString()
-      };
+        sheet.columns = [
+            { header: "ID", key: "id", width: 10 },
+            { header: "Ime", key: "ime", width: 20 },
+            { header: "Priimek", key: "priimek", width: 20 },
+            { header: "Email", key: "email", width: 30 },
+            { header: "Izdelki", key: "izdelki", width: 50 },
+            { header: "Čas", key: "timestamp", width: 25 }
+        ];
 
-      appendOrderToExcel(orderRecord)
-        .then(() => {
-          return res.json({ success: true, orderId: insertedId });
-        })
-        .catch((ex) => {
-          console.error("Excel error:", ex);
-          // še vedno vrnemo success, vendar opozorimo
-          return res.json({ success: true, orderId: insertedId, warning: "Napaka pri zapisovanju v Excel." });
+        rows.forEach((r) => {
+            r.izdelki = JSON.stringify(r.izdelki);
+            sheet.addRow(r);
         });
+
+        res.setHeader(
+            "Content-Type",
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        );
+        res.setHeader("Content-Disposition", "attachment; filename=narocila.xlsx");
+
+        await workbook.xlsx.write(res);
+        res.end();
     });
-
-    stmt.finalize();
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({ error: "Neznana napaka." });
-  }
 });
 
-// fallback to index.html for SPA
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "index.html"));
-});
-
+// === START SERVER ===
 app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
+    console.log("Server teče na http://localhost:" + PORT);
 });
