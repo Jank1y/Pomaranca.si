@@ -95,9 +95,9 @@ cancelOrder.addEventListener("click", () => {
   overlay.classList.remove("prikazano");
 });
 
-// submit obrazca (prikaz v konzoli, kasneje lahko POST na server)
-orderForm.addEventListener("submit", (e) => {
+orderForm.addEventListener("submit", async (e) => {
   e.preventDefault();
+
   const ime = document.getElementById("ime").value.trim();
   const priimek = document.getElementById("priimek").value.trim();
   const email = document.getElementById("email").value.trim();
@@ -107,7 +107,26 @@ orderForm.addEventListener("submit", (e) => {
     return;
   }
 
-  console.log("Naročilo:", { ime, priimek, email, izdelkiVKosarici });
+  // === POŠLJI NA SERVER ===
+  const response = await fetch("/api/narocilo", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      ime,
+      priimek,
+      email,
+      izdelki: izdelkiVKosarici,
+    }),
+  });
+
+  const result = await response.json();
+
+  if (!result.success) {
+    alert("Napaka pri shranjevanju naročila.");
+    return;
+  }
 
   alert(`Naročilo oddano! Hvala, ${ime} ${priimek}`);
 
